@@ -14,7 +14,6 @@ from typing import List
 from database.users_chats_db import db
 from bs4 import BeautifulSoup
 import requests
-from shortzy import Shortzy
 
 from plugins.Dreamxfutures.Imdbposter import get_movie_detailsx
 
