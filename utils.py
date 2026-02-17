@@ -298,57 +298,65 @@ async def get_poster(query, bulk=False, id=False, file=None):
     or movie.get('full-size cover url')
 )
 
+poster = (
+    movie.get('image')
+    or movie.get('cover url')
+    or movie.get('full-size cover url')
+)
+
 if poster:
     poster = poster.replace("http://", "https://")
 
-    if movie.release_date:
-        date = movie.release_date
-    elif movie.year:
-        date = str(movie.year)
-    else:
-        date = "N/A"
-        
-    plot = movie.plot[0] if isinstance(movie.plot, list) else movie.plot or ""
-    if len(plot) > 800:
-        plot = plot[:800] + "..."
-    imdb_id = movie.imdb_id
-    if not imdb_id.startswith("tt"):
-        imdb_id = f"tt{imdb_id}"
-    return {
-        'title': movie.title,
-        'votes': movie.votes,
-        "aka": listx_to_str(movie.title_akas),
-        "seasons": (
-            len(movie.info_series.display_seasons)
-            if getattr(movie, "info_series", None)
-            and getattr(movie.info_series, "display_seasons", None)
-            else "N/A"
-        ),
-        "box_office": movie.worldwide_gross,
-        'localized_title': movie.title_localized,
-        'kind': movie.kind,
-        "imdb_id": imdb_id,
-        "cast": listx_to_str(movie.stars),
-        "runtime": listx_to_str(movie.duration),
-        "countries": listx_to_str(movie.countries),
-        "certificates": listx_to_str(movie.certificates),
-        "languages": listx_to_str(movie.languages),
-        "director": listx_to_str(movie.directors),
-        "writer": listx_to_str([p.name for p in movie.writers]),
-        "producer": listx_to_str([p.name for p in movie.producers]),
-        "composer": listx_to_str([p.name for p in movie.composers]),
-        "cinematographer": listx_to_str([p.name for p in movie.cinematographers]),
-        "music_team": listx_to_str([p.name for p in movie.music_team]),
-        "distributors": listx_to_str([c.name for c in movie.distributors]),        
-        'release_date': date,
-        'year': movie.year,
-        'genres': listx_to_str(movie.genres),
-        'poster': movie.cover_url,
-        'plot': plot,
-        'rating': str(movie.rating),
-        "url": movie.url or f"https://www.imdb.com/title/{imdb_id}"
-    }
-    
+# 🔴 date logic MUST be OUTSIDE poster block
+if movie.release_date:
+    date = movie.release_date
+elif movie.year:
+    date = str(movie.year)
+else:
+    date = "N/A"
+
+plot = movie.plot[0] if isinstance(movie.plot, list) else movie.plot or ""
+if len(plot) > 800:
+    plot = plot[:800] + "..."
+
+imdb_id = movie.imdb_id
+if not imdb_id.startswith("tt"):
+    imdb_id = f"tt{imdb_id}"
+
+return {
+    'title': movie.title,
+    'votes': movie.votes,
+    "aka": listx_to_str(movie.get("akas")),
+    "seasons": (
+        len(movie.info_series.display_seasons)
+        if getattr(movie, "info_series", None)
+        and getattr(movie.info_series, "display_seasons", None)
+        else "N/A"
+    ),
+    "box_office": movie.get("box office"),
+    "localized_title": movie.get("localized title"),
+    "kind": movie.kind,
+    "imdb_id": imdb_id,
+    "cast": listx_to_str(movie.get("cast")),
+    "runtime": listx_to_str(movie.get("runtimes")),
+    "countries": listx_to_str(movie.get("countries")),
+    "certificates": listx_to_str(movie.get("certificates")),
+    "languages": listx_to_str(movie.get("languages")),
+    "director": listx_to_str(movie.get("director")),
+    "writer": listx_to_str(movie.get("writer")),
+    "producer": listx_to_str(movie.get("producer")),
+    "composer": listx_to_str(movie.get("composer")),
+    "cinematographer": listx_to_str(movie.get("cinematographer")),
+    "music_team": listx_to_str(movie.get("music department")),
+    "distributors": listx_to_str(movie.get("distributors")),
+    'release_date': date,
+    'year': movie.year,
+    'genres': listx_to_str(movie.get("genres")),
+    'poster': poster,
+    'plot': plot,
+    'rating': str(movie.get("rating")),
+    'url': f'https://www.imdb.com/title/{imdb_id}'
+}
 #Remove Nahi Kiya Hu.....Agar Tujha Remove Karna Hai To Kar Dena
 async def old_get_poster(query, bulk=False, id=False, file=None):
     if not id:
