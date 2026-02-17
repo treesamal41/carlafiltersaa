@@ -321,9 +321,7 @@ if len(plot) > 800:
 imdb_id = movie.imdb_id
 if not imdb_id.startswith("tt"):
     imdb_id = f"tt{imdb_id}"    
-
-    
-    return {
+ return {
     'title': movie.title,
     'votes': movie.votes,
     "aka": listx_to_str(movie.get("akas")),
