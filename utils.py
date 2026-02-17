@@ -349,14 +349,15 @@ return {
     "cinematographer": listx_to_str(movie.get("cinematographer")),
     "music_team": listx_to_str(movie.get("music department")),
     "distributors": listx_to_str(movie.get("distributors")),
-    'release_date': date,
-    'year': movie.year,
-    'genres': listx_to_str(movie.get("genres")),
-    'poster': poster,
-    'plot': plot,
-    'rating': str(movie.get("rating")),
-    'url': f'https://www.imdb.com/title/{imdb_id}'
+    "release_date": date,
+    "year": movie.year,
+    "genres": listx_to_str(movie.get("genres")),
+    "poster": poster,
+    "plot": plot,
+    "rating": str(movie.rating),
+    "url": f"https://www.imdb.com/title/{imdb_id}"
 }
+
 #Remove Nahi Kiya Hu.....Agar Tujha Remove Karna Hai To Kar Dena
 async def old_get_poster(query, bulk=False, id=False, file=None):
     if not id:
