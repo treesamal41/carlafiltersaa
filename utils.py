@@ -292,6 +292,14 @@ async def get_poster(query, bulk=False, id=False, file=None):
     movie = await asyncio.to_thread(imdb.get_movie, movieid_str)
     if not movie:
         return None
+        poster = (
+    movie.get('image')
+    or movie.get('cover url')
+    or movie.get('full-size cover url')
+)
+
+if poster:
+    poster = poster.replace("http://", "https://")
 
     if movie.release_date:
         date = movie.release_date
