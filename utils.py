@@ -4,7 +4,6 @@ import logging
 import random
 import string
 from info import *
-from imdbkit import IMDBKit 
 import asyncio
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid, ChatAdminRequired, MessageNotModified
@@ -30,8 +29,7 @@ BTN_URL_REGEX = re.compile(
     r"(\[([^\[]+?)\]\((buttonurl|buttonalert):(?:/{0,2})(.+?)(:same)?\))"
 )
 
-
-imdb = IMDBKit() 
+ 
 BANNED = {}
 SMART_OPEN = '“'
 SMART_CLOSE = '”'
