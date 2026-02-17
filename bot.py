@@ -1,3 +1,6 @@
+import asyncio
+if not hasattr(asyncio, "coroutine"):
+    asyncio.coroutine = lambda f: f
 import logging
 import logging.config
 
