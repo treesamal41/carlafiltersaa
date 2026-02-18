@@ -1737,7 +1737,13 @@ async def auto_filter(client, msg, spoll=False):
                 await message.delete()
         except Exception as e:
             logger.exception(e)
-            fek = await message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+            fek = await client.send_photo(
+    chat_id=message.chat.id,
+    photo=NOR_IMG,
+    caption=cap,
+    reply_markup=InlineKeyboardMarkup(btn),
+    reply_to_message_id=message.id
+            )
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
@@ -1749,16 +1755,22 @@ async def auto_filter(client, msg, spoll=False):
                 await fek.delete()
                 await message.delete()
     else:
-        fuk = await message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+        fek = await client.send_photo(
+    chat_id=message.chat.id,
+    photo=NOR_IMG,
+    caption=cap,
+    reply_markup=InlineKeyboardMarkup(btn),
+    reply_to_message_id=message.id
+        )
         try:
             if settings['auto_delete']:
                 await asyncio.sleep(600)
-                await fuk.delete()
+                await fek.delete()
                 await message.delete()
         except KeyError:
             await save_group_settings(message.chat.id, 'auto_delete', True)
             await asyncio.sleep(600)
-            await fuk.delete()
+            await fek.delete()
             await message.delete()
     if spoll:
         await msg.message.delete()
